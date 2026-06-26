@@ -21,17 +21,22 @@ def main():
                        for exp in set([
                            # .bash_history, .node_repl_history,
                            # .python_history, .lesshst
-                           "_history$|.lesshst$",
+                           ".*history$|.lesshst$",
                            "~$",  # vim temp files .gitconfig~
                            r"\.bak$",
                            "_auth",  # auth file
                            r"^\.yarnrc$",  # skip old versions of yarn config
-                           ".claude.json"
+                           "claude.json",
+                           "zcompdum.*",
+                           "wget-hsts",
+                           "pre-oh-my-zsh",
+                           "viminfo"
                        ])]
     sep = os.path.sep
 
     glob_patterns = [
         fr"{home}{sep}.*",
+        f"{home}{sep}.config{sep}*.toml"
         "tsconfig.json"
     ]
 
