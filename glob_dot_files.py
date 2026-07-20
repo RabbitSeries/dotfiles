@@ -37,7 +37,8 @@ def main():
     glob_patterns = [
         fr"{home}{sep}.*",
         f"{home}{sep}.config{sep}*.toml"
-        "tsconfig.json"
+        "tsconfig.json",
+        f"{os.environ.get("LOCALAPPDATA", "")}{sep}clink"
     ]
 
     def in_ignore_patterns(basename: str):
