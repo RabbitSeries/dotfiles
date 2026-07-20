@@ -1,0 +1,7 @@
+[user]
+	email = xiali123.ch@gmail.com
+	name = RabbitSeries
+[core]
+	editor = vim
+[init]
+	defaultBranch = master
