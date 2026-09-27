@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
 import glob
 import os
 import re
+import shutil
 
 
 def yes(prompt: str):
@@ -36,7 +38,7 @@ def main():
 
     glob_patterns = [
         fr"{home}{sep}.*",
-        f"{home}{sep}.config{sep}*.toml"
+        f"{home}{sep}.config{sep}*.toml",
         "tsconfig.json",
         f"{os.environ.get("LOCALAPPDATA", "")}{sep}clink"
     ]
@@ -49,11 +51,11 @@ def main():
     def sync_patterns():
         # path -> entryName
         target_sync_files: dict[str, str] = {
-            path: base
-            for p in glob_patterns
-            for path in glob.glob(p)
-            if os.path.isfile(path) and not in_ignore_patterns(
-                base := os.path.basename(path))
+            p: synced
+            for pattern in glob_patterns
+            for p in glob.glob(pattern)
+            if os.path.isfile(p) and not in_ignore_patterns(
+                synced := os.path.basename(p))
         }
 
         print("Found files:")
@@ -62,9 +64,15 @@ def main():
 
         if yes("Are you sure to copy these files to cwd, "
                f"aka {os.path.realpath(os.path.curdir)}? "):
-            for (path, basename) in target_sync_files.items():
-                with open(path, "r", encoding="utf-8") as input, open(basename, "w", encoding="utf-8") as outfile:  # noqa: E501
-                    outfile.write(input.read())
+            for (p, synced) in target_sync_files.items():
+                if os.path.exists(synced):
+                    os.remove(synced)
+                try:
+                    os.link(p, synced)
+                except Exception as e:
+                    print(e)
+                    print("Trying copy instead.")
+                    shutil.copy(p, synced)
         else:
             print("File copying -- Skipped")
 
