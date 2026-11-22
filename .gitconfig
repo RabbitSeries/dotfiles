@@ -1,0 +1,8 @@
+[user]
+	name = RabbitArch
+	email = <xiali123.ch@gmail.com>
+[core]
+	autocrlf = input
+	editor = vim
+[init]
+	defaultBranch = master
